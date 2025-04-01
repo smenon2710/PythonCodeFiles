@@ -1,0 +1,82 @@
+# 🗳️ Voting Decider
+
+This project helps determine voting outcomes based on logic and user inputs. It’s built in Python, managed with Poetry, and includes Jupyter notebooks and Python scripts. Follow the instructions below to get it running on your machine.
+
+---
+
+## ⚠️ Important Version Note
+
+For this project, you **must use Python 3.12.2**.
+
+---
+
+## 🚀 Quick Start Guide
+
+### ✅ Step 1: Download the Repository
+
+#### Option A: Download ZIP
+1. Go to [this repository](https://github.com/smenon2710/PythonCodeFiles/tree/main/Voting_Decider)
+2. Click the green **`Code`** button.
+3. Click **`Download ZIP`**.
+4. Extract the files to a directory of your choice.
+
+✅ Step 2: Navigate to the Project Folder
+cd PythonCodeFiles/Voting_Decider
+
+
+✅ Step 3: Activate Python 3.12.2
+Check your current Python version:
+
+python --version
+If it's not 3.12.2, activate it using pyenv:
+
+pyenv local 3.12.2
+pyenv which python
+poetry env use $(pyenv which python)
+
+✅ Step 4: Install Dependencies via Poetry
+Ensure Poetry is installed (v1.8.2 recommended). Then run:
+
+poetry install
+
+
+✅ Step 5: Environment Variable Setup (.env file)
+Find the file named .env_example in the Voting_Decider folder.
+Rename it to .env:
+
+Keep it in the Voting_Decider root directory.
+
+Add your API keys in the .env file. Example:
+OPENAI_API_KEY=your_openai_key_here
+ANOTHER_API_KEY=your_other_key_here
+
+If you don’t have an OpenAI API key yet:
+Visit OpenAI’s API dashboard to generate one.
+
+✅ Step 6: Activate the Poetry Virtual Environment
+poetry shell
+
+✅ Step 7: Open Jupyter Lab (for notebooks)
+jupyter lab
+A browser window will open.
+Navigate to the notebook you want to run.
+Run cells with Shift + Enter, or use the top menu:
+Run > Run All Cells
+💡 If something breaks, try:
+Run > Restart Kernel and Run All Cells
+
+✅ Step 8: Run Python Scripts
+You can also run Python files in the terminal or from your code editor:
+
+python your_script_name.py
+Example:
+
+python main.py
+
+✅ Step 9: Exit the Poetry Shell
+exit
+
+✅ Step 10: Re-activate Poetry Shell Anytime Later
+poetry shell
+
+

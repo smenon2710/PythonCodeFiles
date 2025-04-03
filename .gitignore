@@ -1,2 +1,4 @@
 .DS_Storevenv/
 .env
+PersonalExpenseTracker/venv/
+PersonalExpenseTracker/.env

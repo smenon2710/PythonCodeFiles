@@ -1,11 +1,11 @@
 from fastapi import FastAPI, Request
-from backend.rag_pipeline import get_rag_chain
 from fastapi.middleware.cors import CORSMiddleware
+from backend.rag_pipeline import get_rag_chain
 
 app = FastAPI()
 qa_chain = get_rag_chain()
 
-# CORS for Streamlit
+# Allow frontend access (e.g., from Streamlit)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,5 +21,11 @@ def health():
 async def query_api(req: Request):
     body = await req.json()
     query = body.get("query", "")
-    response = qa_chain(query)
-    return {"answer": response['result'], "sources": [doc.metadata for doc in response["source_documents"]]}
+    if not query:
+        return {"error": "No query provided."}
+
+    result = qa_chain(query)
+    return {
+        "answer": result["result"],
+        "sources": [doc.metadata.get("source", "Unknown") for doc in result["source_documents"]],
+    }

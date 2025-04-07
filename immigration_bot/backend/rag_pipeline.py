@@ -1,26 +1,32 @@
-import os
-from langchain_community.vectorstores import FAISS
-from langchain.chains import RetrievalQA
-from langchain_community.chat_models import ChatOpenAI
-from langchain_community.embeddings import HuggingFaceEmbeddings
 from dotenv import load_dotenv
-
 load_dotenv()
 
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_openai import ChatOpenAI
+from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
+
 def get_rag_chain():
-    # Load FAISS index
+    load_dotenv()
+
     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
     retriever = db.as_retriever(search_kwargs={"k": 5})
-
-    # Use OpenAI GPT-3.5
     llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
 
-    # Build RAG chain
-    qa_chain = RetrievalQA.from_chain_type(
-        llm=llm,
-        retriever=retriever,
-        return_source_documents=True,
+    memory = ConversationBufferMemory(
+        memory_key="chat_history",
+        return_messages=True,
+        output_key="answer"  # 👈 important line
     )
 
-    return qa_chain
+    chain = ConversationalRetrievalChain.from_llm(
+        llm=llm,
+        retriever=retriever,
+        memory=memory,
+        return_source_documents=True,
+        verbose=False
+    )
+
+    return chain

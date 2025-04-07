@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from backend.rag_pipeline import get_rag_chain
+from rag_pipeline import get_rag_chain
 
 app = FastAPI()
 qa_chain = get_rag_chain()

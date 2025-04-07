@@ -6,12 +6,14 @@ from langchain_community.vectorstores import FAISS
 from langchain_openai import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
+from pathlib import Path
 
 def get_rag_chain():
     load_dotenv()
 
     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+    index_path = Path(__file__).resolve().parent.parent / "faiss_index"
+    db = FAISS.load_local(index_path, embeddings, allow_dangerous_deserialization=True)
     retriever = db.as_retriever(search_kwargs={"k": 5})
     llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
 

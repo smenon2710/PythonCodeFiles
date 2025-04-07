@@ -80,7 +80,7 @@ if query:
     with st.spinner("ImmigraBot is thinking..."):
         try:
             response = requests.post(
-                "http://127.0.0.1:8000/query",
+                "https://immigrabot-backend.onrender.com/query",
                 json={"query": full_query},
                 timeout=30
             )

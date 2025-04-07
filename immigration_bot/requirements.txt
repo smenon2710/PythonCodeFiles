@@ -8,4 +8,5 @@ sentence-transformers
 openai
 huggingface_hub
 python-dotenv
-langchain
+langchain-openai
+langchain-community

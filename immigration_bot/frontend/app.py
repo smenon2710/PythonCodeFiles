@@ -101,4 +101,4 @@ if query:
 
         except Exception as e:
             st.session_state.messages.append({"role": "bot", "content": str(e)})
-            st.error(f"💥 Something went wrong: {e}")
+            st.error(f"💥 Something went wrong: {e}") 

@@ -1,26 +1,28 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from rag_pipeline import get_rag_chain
+from immigration_bot.backend.rag_pipeline import get_rag_chain
+
+print("🟡 Starting FastAPI app...")
 
 app = FastAPI()
-qa_chain = get_rag_chain()
 
+# Setup CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Change to frontend domain in prod
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-@app.post("/query")
-async def query_api(request: Request):
-    body = await request.json()
-    question = body.get("query", "")
-    result = qa_chain({"question": question})
-    answer = result["answer"]
-    sources = [doc.metadata.get("source", "unknown") for doc in result.get("source_documents", [])]
-    return {"answer": answer, "sources": sources}
+print("🧠 Loading RAG chain...")
+try:
+    qa_chain = get_rag_chain()
+    print("✅ RAG chain loaded successfully.")
+except Exception as e:
+    print(f"❌ Failed to load RAG chain: {e}")
+    raise
 
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
+@app.get("/")
+async def root():
+    return {"message": "RAG API is running ✅"}

@@ -22,7 +22,7 @@ def get_rag_chain():
     # If index is missing, ingest on-the-fly (e.g., on Render)
     if not index_file.exists():
         print("🛠 FAISS index not found. Running ingestion to rebuild it...")
-        from .ingest_docs import ingest
+        from immigration_bot.backend.ingest_docs import ingest
         ingest()
 
     # Load vector DB

@@ -3,6 +3,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from tqdm import tqdm
+from pathlib import Path
 import os
 import requests
 
@@ -19,14 +20,15 @@ def download_pdf_if_missing(file_path, url):
 
 def ingest():
     # PDF settings
-    file_path = "immigration_bot/data/raw/uscis_policy_manual.pdf"
+    
+    file_path = Path(__file__).resolve().parent.parent / "data" / "raw" / "uscis_policy_manual.pdf"
     pdf_url = "https://www.uscis.gov/sites/default/files/document/policy-manual/uscis_policy_manual.pdf"
 
     # Download PDF if not present
     download_pdf_if_missing(file_path, pdf_url)
 
     print("📄 Loading document...")
-    loader = PyPDFLoader(file_path)
+    loader = PyPDFLoader(str(file_path))
     docs = loader.load()
 
     # Split into chunks

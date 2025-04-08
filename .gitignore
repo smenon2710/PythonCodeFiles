@@ -10,10 +10,10 @@ venv/
 
 # Ignore processed and raw data
 data/processed/
-data/raw/
+#data/raw/
 
 # Ignore dataset files (e.g. large PDFs, CSVs)
-*.pdf
+#*.pdf
 *.csv
 
 # Mac system files

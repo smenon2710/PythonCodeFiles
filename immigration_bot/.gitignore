@@ -1,7 +1,0 @@
-.venv/
-__pycache__/
-faiss_index/
-*.pyc
-.env
-*.DS_Store
-data/raw/

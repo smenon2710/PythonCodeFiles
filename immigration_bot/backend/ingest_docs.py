@@ -34,7 +34,8 @@ def ingest():
     # Split into chunks
     print("✂️ Splitting document into chunks...")
     splitter = RecursiveCharacterTextSplitter(chunk_size=300,   # was 500
-    chunk_overlap=20  # was 50)
+    chunk_overlap=20  # was 50
+    )
     chunks = splitter.split_documents(docs)
     print(f"✅ Split into {len(chunks)} chunks.")
 

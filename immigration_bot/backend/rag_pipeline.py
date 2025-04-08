@@ -16,7 +16,7 @@ def get_rag_chain():
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
     # FAISS index path
-    index_path = Path(__file__).resolve().parent.parent / "faiss_index"
+    index_path = Path(__file__).resolve().parent / "faiss_index"
     index_file = index_path / "index.faiss"
 
     # If index is missing, ingest on-the-fly (e.g., on Render)

@@ -20,5 +20,9 @@ data/processed/
 .DS_Store
 
 # Ignore FAISS index folder
-faiss_index/
+#faiss_index/
+
+# Ignore local test files
+testpath.py
+
 

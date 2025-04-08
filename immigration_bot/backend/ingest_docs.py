@@ -4,29 +4,43 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from tqdm import tqdm
 import os
+import requests
+
+def download_pdf_if_missing(file_path, url):
+    if not os.path.exists(file_path):
+        print(f"📥 PDF not found. Downloading from: {url}")
+        response = requests.get(url)
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with open(file_path, "wb") as f:
+            f.write(response.content)
+        print("✅ Download complete.")
+    else:
+        print("📄 PDF already exists, skipping download.")
 
 def ingest():
-    # Load your PDF
+    # PDF settings
     file_path = "immigration_bot/data/raw/uscis_policy_manual.pdf"
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(f"❌ File not found at: {file_path}")
+    pdf_url = "https://www.uscis.gov/sites/default/files/document/policy-manual/uscis_policy_manual.pdf"
+
+    # Download PDF if not present
+    download_pdf_if_missing(file_path, pdf_url)
 
     print("📄 Loading document...")
     loader = PyPDFLoader(file_path)
     docs = loader.load()
 
-    # Chunk the document
+    # Split into chunks
     print("✂️ Splitting document into chunks...")
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     chunks = splitter.split_documents(docs)
     print(f"✅ Split into {len(chunks)} chunks.")
 
-    # Embedding
+    # Embed
     print("🧠 Starting embedding process...")
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")   # Or use a smaller model for faster dev
-    db = FAISS.from_documents(tqdm(chunks, desc="🔄 Embedding chunks"), embeddings)
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    db = FAISS.from_documents(tqdm(chunks, desc="🔍 Embedding chunks"), embeddings)
 
-    # Save the index
+    # Save index
     db.save_local("faiss_index")
     print("✅ Embedding complete. FAISS index saved to 'faiss_index/'.")
 

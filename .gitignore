@@ -18,3 +18,7 @@ data/raw/
 
 # Mac system files
 .DS_Store
+
+# Ignore FAISS index folder
+faiss_index/
+

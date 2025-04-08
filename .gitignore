@@ -2,3 +2,19 @@
 .env
 PersonalExpenseTracker/venv/
 PersonalExpenseTracker/.env
+
+# Ignore virtual environments
+.venv/
+venv/
+
+
+# Ignore processed and raw data
+data/processed/
+data/raw/
+
+# Ignore dataset files (e.g. large PDFs, CSVs)
+*.pdf
+*.csv
+
+# Mac system files
+.DS_Store

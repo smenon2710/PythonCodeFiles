@@ -7,7 +7,7 @@ import os
 
 def ingest():
     # Load your PDF
-    file_path = "data/raw/uscis_policy_manual.pdf"
+    file_path = "immigration_bot/data/raw/uscis_policy_manual.pdf"
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"❌ File not found at: {file_path}")
 
@@ -23,7 +23,7 @@ def ingest():
 
     # Embedding
     print("🧠 Starting embedding process...")
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")   # Or use a smaller model for faster dev
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")   # Or use a smaller model for faster dev
     db = FAISS.from_documents(tqdm(chunks, desc="🔄 Embedding chunks"), embeddings)
 
     # Save the index

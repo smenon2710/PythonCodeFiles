@@ -11,7 +11,7 @@ from pathlib import Path
 def get_rag_chain():
     load_dotenv()
 
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     index_path = Path(__file__).resolve().parent.parent / "faiss_index"
     db = FAISS.load_local(index_path, embeddings, allow_dangerous_deserialization=True)
     retriever = db.as_retriever(search_kwargs={"k": 5})

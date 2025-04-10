@@ -13,7 +13,7 @@ def get_rag_chain():
         raise FileNotFoundError(f"❌ FAISS index not found at: {index_path}. Please run ingest_docs.py locally and commit the index.")
 
     print("✅ FAISS index found. Loading...")
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-MiniLM-L3-v2")
 
     # Load the FAISS vector store
     db = FAISS.load_local(index_path, embeddings, allow_dangerous_deserialization=True)

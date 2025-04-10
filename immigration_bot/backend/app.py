@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .rag_pipeline import get_rag_chain
+from immigration_bot.backend.rag_pipeline import get_rag_chain
 
 print("🟡 Starting FastAPI app...")
 

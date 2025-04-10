@@ -14,3 +14,5 @@ transformers
 pypdf
 pathlib
 langchain-huggingface
+psutil
+

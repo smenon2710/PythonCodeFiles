@@ -7,7 +7,7 @@ def get_rag_chain():
     print("🚀 Initializing RAG pipeline...")
 
     # Path to your existing FAISS index
-    index_path = Path(__file__).resolve().parent.parent / "faiss_index"
+    index_path = Path(__file__).resolve().parent / "faiss_index"
 
     if not index_path.exists():
         raise FileNotFoundError(f"❌ FAISS index not found at: {index_path}. Please run ingest_docs.py locally and commit the index.")

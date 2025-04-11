@@ -1,48 +1,35 @@
-.DS_Storevenv/
-immigration_bot/.env
-immigration_bot/backend/test_faiss_query.py
-PersonalExpenseTracker/venv/
-PersonalExpenseTracker/.env
-
-# Ignore virtual environments
-.venv/
-venv/
-
-
-# Ignore processed and raw data
-data/processed/
-#data/raw/
-
-# Ignore dataset files (e.g. large PDFs, CSVs)
-#*.pdf
-*.csv
-
-# Mac system files
+# macOS system files
 .DS_Store
 
-# Ignore FAISS index folder
-#faiss_index/
-
-# Ignore local test files
-testpath.py
-
-
-# Byte-compiled / cache files
+# Python bytecode and cache
 __pycache__/
 *.py[cod]
 
-# Environment
-.env
+# Virtual environments
 .venv/
-*.env
+venv/
 
-# FAISS index
+# Environment files
+.env
+*.env
+immigration_bot/.env
+PersonalExpenseTracker/.env
+
+# FAISS index (large binary data)
 immigration_bot/faiss_index/
 
-# Processed data (optional if dynamically generated)
+# Data (optional - if regenerated)
+data/processed/
 immigration_bot/data/processed/
 
-# VSCode settings and Python history
+# Local test scripts
+immigration_bot/backend/test_faiss_query.py
+testpath.py
+
+# Dataset files (uncomment if not tracking large PDFs or CSVs)
+#*.pdf
+*.csv
+
+# VS Code
 .vscode/
 *.history
-

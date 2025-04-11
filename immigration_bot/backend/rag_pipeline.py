@@ -1,27 +1,31 @@
 from langchain_community.vectorstores import FAISS
-from langchain_huggingface import HuggingFaceEmbeddings  # ⬅️ Optimized package
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain.chains import RetrievalQA
+from langchain.chat_models import ChatOpenAI  # You can use any LLM here
 from pathlib import Path
 import os
 
 def get_rag_chain():
     print("🚀 Initializing RAG pipeline...")
 
-    # Path to your existing FAISS index
     index_path = Path(__file__).resolve().parent / "faiss_index"
 
     if not index_path.exists():
-        raise FileNotFoundError(f"❌ FAISS index not found at: {index_path}. Please run ingest_docs.py locally and commit the index.")
+        raise FileNotFoundError(f"❌ FAISS index not found at: {index_path}")
 
     print("✅ FAISS index found. Loading...")
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-MiniLM-L3-v2")
+    embeddings = HuggingFaceEmbeddings(model_name="intfloat/e5-small-v2")
 
-    # Load the FAISS vector store
     db = FAISS.load_local(index_path, embeddings, allow_dangerous_deserialization=True)
-
     print("📚 FAISS index loaded successfully.")
-    
-    # Construct a basic retriever chain (example)
+
     retriever = db.as_retriever(search_kwargs={"k": 3})
-    
-    # You can return retriever directly or build a full chain
-    return retriever  # or return your chain if using LangChain chains
+
+    # 👉 Wrap retriever with an LLM-powered QA chain
+    qa_chain = RetrievalQA.from_chain_type(
+        llm=ChatOpenAI(temperature=0, model="gpt-3.5-turbo"),
+        retriever=retriever,
+        return_source_documents=True  # optional for debugging / frontend
+    )
+
+    return qa_chain

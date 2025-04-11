@@ -1,5 +1,6 @@
 .DS_Storevenv/
-.env
+immigration_bot/.env
+immigration_bot/backend/test_faiss_query.py
 PersonalExpenseTracker/venv/
 PersonalExpenseTracker/.env
 
@@ -25,4 +26,23 @@ data/processed/
 # Ignore local test files
 testpath.py
 
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+
+# Environment
+.env
+.venv/
+*.env
+
+# FAISS index
+immigration_bot/faiss_index/
+
+# Processed data (optional if dynamically generated)
+immigration_bot/data/processed/
+
+# VSCode settings and Python history
+.vscode/
+*.history
 

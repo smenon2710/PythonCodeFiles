@@ -30,7 +30,7 @@ def ingest():
     texts = text_splitter.split_documents(docs)
     print(f"🧩 Split into {len(texts)} chunks.")
 
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-MiniLM-L3-v2")
+    embeddings = HuggingFaceEmbeddings(model_name = "intfloat/e5-small-v2")
     print("🔍 Embeddings initialized.")
 
     index_path = Path(__file__).resolve().parent.parent / "faiss_index"

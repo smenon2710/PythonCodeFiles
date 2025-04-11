@@ -3,6 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from immigration_bot.backend.rag_pipeline import get_rag_chain
 import logging
 import psutil
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # ---- Logging Setup ----
 logging.basicConfig(level=logging.INFO)
@@ -45,10 +48,19 @@ def root():
 async def ask_question(query: dict):
     if qa_chain is None:
         return {"error": "RAG chain not loaded."}
+    
     question = query.get("question")
     if not question:
         return {"error": "No question provided."}
+    
     logger.info(f"📥 Received question: {question}")
-    response = qa_chain.run(question)
+    
+    output = qa_chain.invoke({"query": question})
+    response = output.get("result", "Sorry, I couldn't find an answer.")
+    sources = output.get("source_documents", [])
+    
     logger.info(f"📤 Response: {response}")
-    return {"response": response}
+    return {
+        "response": response,
+        "sources": [doc.metadata.get("source", "N/A") for doc in sources]
+    }

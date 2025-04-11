@@ -1,7 +1,10 @@
 import streamlit as st
 import requests
 
+# Page configuration
 st.set_page_config(page_title="ImmigraBot", page_icon="🧠")
+
+# Custom styles
 st.markdown(
     """
     <style>
@@ -31,6 +34,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# Title & warning
 st.title("🧠 ImmigraBot - U.S. Immigration Law Assistant")
 st.info("⚠️ This tool is for informational purposes only and does not provide legal advice. Please consult an immigration attorney for legal matters.")
 
@@ -38,7 +42,7 @@ st.info("⚠️ This tool is for informational purposes only and does not provid
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Render message history
+# Render chat history
 for msg in st.session_state.messages:
     role = msg["role"]
     content = msg["content"]
@@ -62,13 +66,13 @@ for msg in st.session_state.messages:
             for src in sorted(set(msg["sources"])):
                 st.markdown(f"- `{src}`")
 
-# Get user input
+# User input
 query = st.chat_input("Ask your question here...")
 
 if query:
     st.session_state.messages.append({"role": "user", "content": query})
 
-    # Retrieve previous user message for memory
+    # Retrieve previous user message for memory context
     previous = ""
     for msg in reversed(st.session_state.messages[:-1]):
         if msg["role"] == "user":
@@ -80,13 +84,13 @@ if query:
     with st.spinner("ImmigraBot is thinking..."):
         try:
             response = requests.post(
-                "https://immigrabot-backend.onrender.com/query",
-                json={"query": full_query},
+                "http://localhost:10000/ask",
+                json={"question": full_query},
                 timeout=30
             )
             if response.status_code == 200:
                 data = response.json()
-                answer = data.get("answer", "Sorry, I couldn’t find an answer.")
+                answer = data.get("response", "Sorry, I couldn’t find an answer.")
                 sources = data.get("sources", [])
 
                 st.session_state.messages.append({
@@ -100,5 +104,6 @@ if query:
                 st.session_state.messages.append({"role": "bot", "content": error_msg})
 
         except Exception as e:
-            st.session_state.messages.append({"role": "bot", "content": str(e)})
-            st.error(f"💥 Something went wrong: {e}") 
+            error_msg = f"💥 Something went wrong: {e}"
+            st.session_state.messages.append({"role": "bot", "content": error_msg})
+            st.error(error_msg)

@@ -1,0 +1,124 @@
+3d
+accenture
+adobe
+adp
+advanced micro devices
+aetna
+airbnb
+amgen
+apple
+applied materials
+atos syntel
+atosyntel
+barclays
+bloomberg
+blackrock
+bytedance
+capital one
+capgemini
+caremark
+charles schwab
+charter communications
+chewy
+cigna
+cisco
+citibank
+citiustech
+cloud big data
+cognizant
+columbia
+compunnel
+comcast
+credit suisse
+cummins
+cvs
+deloitte
+doordash
+docusign
+ebay
+eficens
+elevance health
+emory
+ernst young
+expedia
+facebook
+fidelity
+fis
+fiserv
+ford
+general motors
+goldman sachs
+grandison
+harvard
+hewlett packard
+hexaware
+hcl
+htc
+ibm
+infocons
+infosys
+infinite computer solutions
+innova
+intel
+intuit
+jpmorgan chase
+kforce
+kpmg
+linkedin
+lucid
+ltimindtree
+mastech
+mathworks
+mayo clinic
+mckinsey
+medtronic
+meta
+micron
+milwaukee board of school directors
+microsoft
+morgan stanley
+mphasis
+myvisa
+national institutes of health
+nvidia
+ntt data
+optum
+oracle
+palantir
+palo alto networks
+paypal
+people tech
+persistent systems
+populus
+pricewaterhousecoopers
+pwc
+qualcomm
+randstad
+rivian
+salesforce
+servicenow
+snap
+square
+stanford
+state street
+stripe
+synechron
+t mobile
+tata consultancy
+tech mahindra
+tesla
+the boston consulting group
+tiktok
+trustees of the university of pennsylvania
+uber
+ust global
+vcloud
+visa
+vmware
+washington university
+wells fargo
+western digital
+wipro
+workday
+walmart
+yale

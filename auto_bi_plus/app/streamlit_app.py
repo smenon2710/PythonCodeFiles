@@ -11,6 +11,7 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import chardet
 from src.modeling.forecast import forecast_with_prophet
 from src.modeling.anomaly import detect_anomalies
 from src.modeling.cluster import run_kmeans_clustering
@@ -22,8 +23,26 @@ st.title("📊 AutoBI+ – ML-powered Dashboard Analysis")
 uploaded_file = st.file_uploader("Upload your dashboard CSV", type=["csv"])
 
 if uploaded_file:
-    df = pd.read_csv(uploaded_file)
-    st.write("✅ Data preview:")
+    try:
+        # Smart encoding detection with fallback
+        raw_bytes = uploaded_file.read()
+        detected_encoding = chardet.detect(raw_bytes)["encoding"]
+
+        # Handle bad guesses like johab or None
+        if detected_encoding is None or detected_encoding.lower() in ["johab", "ascii"]:
+            encoding = "latin1"
+        else:
+            encoding = detected_encoding
+
+        uploaded_file.seek(0)
+        df = pd.read_csv(uploaded_file, encoding=encoding)
+        st.success(f"✅ File loaded with encoding: `{encoding}`")
+
+    except Exception as e:
+        st.error(f"❌ Failed to read file: {e}")
+        st.stop()
+
+    st.write("### 📄 Data preview:")
     st.dataframe(df.head())
 
     # Column suggestions
@@ -44,7 +63,6 @@ if uploaded_file:
 
     analysis_type = st.radio("Choose analysis type", ["Forecasting", "Anomaly Detection", "Clustering"])
 
-    # ⬇️ Additional inputs only shown when Clustering is selected
     if analysis_type == "Clustering":
         cluster_features = st.multiselect(
             "🔢 Select features for clustering",
@@ -69,7 +87,7 @@ if uploaded_file:
                 st.error(f"❌ '{value_col}' is not numeric.")
                 st.stop()
 
-            # 📉 Forecasting
+            # Forecasting
             if analysis_type == "Forecasting":
                 try:
                     forecast_df = forecast_with_prophet(df, date_col, value_col)
@@ -82,12 +100,11 @@ if uploaded_file:
 
                     csv = forecast_df.to_csv(index=False).encode("utf-8")
                     st.download_button("📥 Download forecast as CSV", csv, f"forecast_{value_col}.csv", "text/csv")
-
                 except Exception as e:
                     st.error(f"❌ Forecasting failed:\n{e}")
                     st.code(traceback.format_exc())
 
-            # 🚨 Anomaly Detection
+            # Anomaly Detection
             elif analysis_type == "Anomaly Detection":
                 try:
                     df.set_index(date_col, inplace=True)
@@ -124,7 +141,7 @@ if uploaded_file:
                     st.error(f"❌ Anomaly Detection failed:\n{e}")
                     st.code(traceback.format_exc())
 
-            # 🧠 Clustering (no forms!)
+            # Clustering
             elif analysis_type == "Clustering":
                 if len(cluster_features) < 2:
                     st.warning("Please select at least 2 features for clustering.")

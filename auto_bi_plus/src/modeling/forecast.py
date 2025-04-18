@@ -8,25 +8,43 @@ from sklearn.metrics import mean_absolute_error
 
 # auto_bi_plus/src/modeling/forecast.py
 
-def forecast_with_prophet(df: pd.DataFrame, date_col: str, value_col: str, periods: int = 30):
-    df = df[[date_col, value_col]].copy()
-    df = df.rename(columns={date_col: "ds", value_col: "y"})
 
-    # Clean data
-    df["ds"] = pd.to_datetime(df["ds"])
-    df = df.dropna(subset=["ds", "y"])
-    df = df.sort_values("ds").drop_duplicates("ds")
-    
-    if len(df) < 2:
-        raise ValueError("Not enough data points for forecasting.")
-    
-    model = Prophet()
-    model.fit(df)
 
-    future = model.make_future_dataframe(periods=periods)
-    forecast = model.predict(future)
 
-    return forecast[["ds", "yhat", "yhat_lower", "yhat_upper"]]
+def forecast_with_prophet(df, date_col, value_col, periods=30):
+    try:
+        # Clean and parse the datetime column
+        df[date_col] = df[date_col].astype(str)
+
+        # If values contain ranges like "Aug 17, 2022 07:00 PM - Aug 17, 2022 08:00 PM"
+        if df[date_col].str.contains(" - ").any():
+            df[date_col] = df[date_col].str.extract(r'^(.*?)(?:\s*-\s*.*)?')[0]
+
+        # Try to convert to datetime
+        df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+
+        # Drop rows with unparseable datetimes or missing values
+        df = df.dropna(subset=[date_col, value_col])
+
+        # Rename columns for Prophet
+        prophet_df = df[[date_col, value_col]].rename(columns={date_col: "ds", value_col: "y"})
+
+        # Sort by datetime
+        prophet_df = prophet_df.sort_values("ds")
+
+        # Fit the model
+        model = Prophet()
+        model.fit(prophet_df)
+
+        # Create future dataframe
+        future = model.make_future_dataframe(periods=periods)
+        forecast = model.predict(future)
+
+        return forecast
+
+    except Exception as e:
+        raise RuntimeError(f"Prophet forecasting failed: {e}")
+
 
 
 def forecast_with_xgboost(df: pd.DataFrame, date_col: str, value_col: str):
